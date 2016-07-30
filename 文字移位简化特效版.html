@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #Out-border { position:relative; margin: 50px auto; width:600px;height:400px;border:1px solid black;}
+        #left-border { float:left;margin:20px 10px 10px 0;width:250px;height:200px;background: #2A9293;resize:none;font-size:15px;}
+        #right-border { float:right;margin:20px 10px 10px 0;padding:1px;width:250px;height:202px; background:#23B9AC;word-break: break-all;font-size:15px;overflow:hidden;}
+        button { position:absolute;width:100px;height:60px; border:none; bottom:0;left:50%;margin-left:-50px;background:#EDBF01;font-size:25px;color:whitesmoke;}
+        #loading { float: left;width:600px;height:100px;}
+        #loading .loadingnum { display:block;width: 100px;height:50px; margin:0 auto;}
+        .loadingnum div { float: left;width:20px;height:40px;margin:2px 2.5px;position: relative;overflow:hidden;}
+        .imgA { position:absolute;top:0;width: 20px;height:40px; }
+        .imgB { position:absolute;top:40px; width: 20px;height:40px;}
+        #loading ul  { width:180px;height:20px;margin-top:10px; margin-left:160px;display:none;}
+        li  { float:left; width:20px;height:20px; background-color:orange;list-style:none;margin-left:10px;}
+        #loading .Oldli  { float:left; width:20px;height:20px; background-color:orange;list-style:none;margin-left:10px;}
+        #loading  .Nowli  { float:left; width:20px;height:20px; background-color:yellow;list-style:none;margin-left:10px;}
+    </style>
+    <script src="Domove.js"></script>
+    <script>
+        /*写一个函数 把文字段拆成一个又一个 然后 删一个  在生成桌面 而被删的那个 移动到另外一边 对应的位置上 然后 添加进去*/
+        window.onload = function(){
+            var Obtn = document.querySelector('button');
+            var Lefttext = document.querySelector('#right-border');
+            var imgA = document.querySelectorAll('.imgA');
+            var imgB = document.querySelectorAll('.imgB');
+            var Ali = document.querySelectorAll('li');
+            var Oul = document.querySelector('ul');
+            var oldStr = '';
+            var n=0;
+            Obtn.onclick = function(){
+
+                clearInterval(timer);
+                Lefttext.innerHTML='';
+                var Otext = document.querySelector('#left-border');
+                if (Otext.value){
+                    Obtn.style.display = 'none';
+                    Oul.style.display = 'block';
+
+                    n = Otext.value.length;
+                    /* 前面我的想法 太复杂  想的是 字体变化 引发 number变化   现在 不用字体变化  而是用 number 拜年话 触发字体变化
+                    *  输入值 之后 取得 值得 length 就开始减
+                    *  n--
+                    *  b.innerHTML+=a.substring(n)
+                    *  然后  a = a.substring(0,n-1)
+                    *
+                    *
+                    * */
+
+                    var timer = setInterval(function(){
+                        Lefttext.innerHTML=Otext.value.slice(-1)+Lefttext.innerHTML;
+                        Otext.value = Otext.value.substring(0,n-1);
+                        Chapic(Otext.value);
+                        Ali[(n-1)%Ali.length].className= 'Nowli';
+                        Ali[(n)%Ali.length].className= 'Oldli';
+                        n--;
+
+                        if(n<=0){
+                            Obtn.style.display = 'block';
+                            clearInterval(timer);
+                            Oul.style.display = 'none';
+                        }
+                    }, 200);
+
+                }else{
+                    alert('请输入一点东西');
+                }
+
+            };
+
+            function Chapic(obj){
+                var a = '000000'+obj.length+'0';
+                var b = a.slice(-5,-1);
+                var imgA = document.querySelectorAll('.imgA');
+                var imgB = document.querySelectorAll('.imgB');
+
+                for(var i=0;i< b.length;i++){
+                    if(b.charAt(i)!=oldStr.charAt(i)) {
+                        imgB[i].src = "img/"+b.charAt(i)+".jpg";// 找到了 不同的地方 然后呢 怎么替换 B怎么上去
+                        (function(a){Domove(imgA[a],"top",10,-50,function(){imgA[a].className ="imgB";imgA[a].style.top="50px";})})(i);
+                        (function(a){Domove(imgB[a],"top",10,0,function(){imgB[a].className ="imgA"})})(i);
+                    }
+                }
+
+                oldStr = b;
+            }
+        }
+
+    </script>
+
+</head>
+<div id="Out-border">
+    <textarea id="left-border" ></textarea>
+    <div id="right-border"></div>
+    <div id="loading">
+        <div class="loadingnum">
+            <div> <img class="imgA" src="img/0.JPG">
+                <img class="imgB" src="img/0.JPG">
+            </div>
+            <div> <img class="imgA" src="img/0.JPG">
+                <img class="imgB" src="img/0.JPG">
+            </div>
+            <div> <img class="imgA" src="img/0.JPG">
+                <img class="imgB" src="img/0.JPG">
+            </div>
+            <div> <img class="imgA" src="img/0.JPG">
+                <img class="imgB" src="img/0.JPG">
+            </div>
+
+        </div>
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <button>交换</button>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #Out-border { position:relative; margin: 50px auto; width:600px;height:400px;border:1px solid black;}
+        #left-border { float:left;margin:20px 10px 10px 0;width:250px;height:200px;background: #2A9293;resize:none;font-size:15px;}
+        #right-border { float:right;margin:20px 10px 10px 0;padding:1px;width:250px;height:202px; background:#23B9AC;word-break: break-all;font-size:15px;}
+        button { position:absolute;width:100px;height:60px; border:none; bottom:0;left:50%;margin-left:-50px;background:#EDBF01;font-size:25px;color:whitesmoke;}
+        #loading { float: left;border:1px solid black;width:600px;height:100px;}
+        #loading span { display:block;width: 100px;height:50px;border:1px solid black; margin:0 auto;}
+        #loading ul  { width:180px;height:20px;margin-top:10px; margin-left:160px;}
+        #loading li  { float:left; width:20px;height:20px; background-color:orange;list-style:none;margin-left:10px;}
+    </style>
+
+    <script>
+        /*写一个函数 把文字段拆成一个又一个 然后 删一个  在生成桌面 而被删的那个 移动到另外一边 对应的位置上 然后 添加进去*/
+        window.onload = function(){
+        var Obtn = document.querySelector('button');
+        var Lefttext = document.querySelector('#right-border');
+        var Ospan = document.querySelector('span');
+            Obtn.onclick = function(){
+             var Otext = document.querySelector('#left-border');
+             var textArr1 = Otext.value.split('');
+             var textArr2 = [];
+             var timer = setInterval(function(){
+                 textArr2.unshift(textArr1.pop());
+                 /* 判断字数 然后 将字数以图片的形式显示出来 前面显示当前的
+                 *  那么 如果 我这个地方 要弄成轮播的形式 去 转动 就要添加 有多少位
+                 *
+                 * */
+                 console.log(textArr2);
+                 Otext.value = textArr1.join('');
+                 Lefttext.innerHTML = textArr2.join('');
+                 if(textArr1.length==0){
+                     clearInterval(timer);
+                 }
+             }, 100);
+            };
+        }
+
+    </script>
+
+</head>
+<div id="Out-border">
+    <textarea id="left-border" ></textarea>
+    <div id="right-border"></div>
+    <div id="loading">
+        <span></span>
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <button>交换</button>
+</div>
+
+
+</body>
+</html>
